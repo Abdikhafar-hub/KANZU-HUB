@@ -2,21 +2,45 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Search, Heart, User, ShoppingBag, MessageCircle, Menu, X } from "lucide-react";
 
-const NAV: { label: string; to: string }[] = [
-  { label: "Shop", to: "/shop" },
-  { label: "Kanzu", to: "/shop", },
-  { label: "Jubbas", to: "/shop" },
-  { label: "Abayas", to: "/shop" },
-  { label: "Accessories", to: "/shop" },
-  { label: "New Arrivals", to: "/shop" },
-  { label: "Best Sellers", to: "/shop" },
+// Headwear product imports for mega menu
+import kufiCap from "@/assets/kufi_cap.png";
+import taqiyahCap from "@/assets/taqiyah_cap.png";
+import omaniKumma from "@/assets/omani_kumma.png";
+import ghutra from "@/assets/ghutra.png";
+import shemagh from "@/assets/shemagh.png";
+import keffiyeh from "@/assets/keffiyeh.png";
+import agal from "@/assets/agal.png";
+import imamah from "@/assets/imamah.png";
+
+const HEADWEAR_COLLECTIONS = [
+  { label: "Kufi Caps", image: kufiCap },
+  { label: "Taqiyah", image: taqiyahCap },
+  { label: "Omani Kumma", image: omaniKumma },
+  { label: "Ghutra", image: ghutra },
+  { label: "Shemagh", image: shemagh },
+  { label: "Keffiyeh", image: keffiyeh },
+  { label: "Agal", image: agal },
+  { label: "Imamah", image: imamah },
+];
+
+const NAV: { label: string; to: string; search?: Record<string, string> }[] = [
+  { label: "Shop All", to: "/shop" },
+  { label: "Saudi Thobes", to: "/shop", search: { category: "Saudi Thobes" } },
+  { label: "Emirati Kanzu", to: "/shop", search: { category: "Emirati Kanzu" } },
+  { label: "Omani Kanzu", to: "/shop", search: { category: "Omani Kanzu" } },
+  { label: "Moroccan Jubbas", to: "/shop", search: { category: "Moroccan Jubbas" } },
+  { label: "Swahili Kanzu", to: "/shop", search: { category: "Swahili Kanzu" } },
+  { label: "Bisht", to: "/shop", search: { category: "Bisht Collection" } },
+  { label: "Perfumes", to: "/shop", search: { category: "Luxury Perfumes" } },
+  { label: "Headwear", to: "/shop", search: { category: "Headwear" } },
   { label: "About", to: "/about" },
-  { label: "Contact", to: "/contact" },
 ];
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [headwearHovered, setHeadwearHovered] = useState(false);
+  const [mobileHeadwearOpen, setMobileHeadwearOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -89,18 +113,76 @@ export function SiteHeader() {
         </div>
 
         {/* Secondary nav (desktop) */}
-        <div className="hidden border-t border-hairline lg:block">
+        <div 
+          className="relative hidden border-t border-hairline lg:block"
+          onMouseLeave={() => setHeadwearHovered(false)}
+        >
           <nav className="mx-auto flex max-w-[1440px] items-center justify-center gap-10 px-6 py-3">
-            {NAV.map((n) => (
-              <Link
-                key={n.label}
-                to={n.to}
-                className="text-[11px] tracking-[0.22em] uppercase text-ink/80 hover:text-ink"
-              >
-                {n.label}
-              </Link>
-            ))}
+            {NAV.map((n) => {
+              if (n.label === "Headwear") {
+                return (
+                  <div 
+                    key={n.label}
+                    className="relative py-1"
+                    onMouseEnter={() => setHeadwearHovered(true)}
+                  >
+                    <Link
+                      to={n.to}
+                      search={n.search}
+                      className={`text-[11px] tracking-[0.22em] uppercase transition-colors duration-200 ${headwearHovered ? 'text-gold' : 'text-ink/80 hover:text-ink'}`}
+                    >
+                      {n.label}
+                    </Link>
+                  </div>
+                );
+              }
+              return (
+                <Link
+                  key={n.label}
+                  to={n.to}
+                  search={n.search}
+                  onMouseEnter={() => setHeadwearHovered(false)}
+                  className="text-[11px] tracking-[0.22em] uppercase text-ink/80 hover:text-ink py-1"
+                >
+                  {n.label}
+                </Link>
+              );
+            })}
           </nav>
+
+          {/* Mega Menu panel */}
+          {headwearHovered && (
+            <div 
+              className="absolute left-0 right-0 top-full z-40 border-b border-hairline bg-background shadow-lg transition-all duration-300"
+              onMouseEnter={() => setHeadwearHovered(true)}
+              onMouseLeave={() => setHeadwearHovered(false)}
+            >
+              <div className="mx-auto max-w-[1440px] px-6 py-10">
+                <div className="grid grid-cols-8 gap-4">
+                  {HEADWEAR_COLLECTIONS.map((c) => (
+                    <Link
+                      key={c.label}
+                      to="/shop"
+                      search={{ category: "Headwear", subCategory: c.label }}
+                      className="group flex flex-col items-center text-center"
+                      onClick={() => setHeadwearHovered(false)}
+                    >
+                      <div className="aspect-square w-full overflow-hidden bg-ivory border border-hairline transition-all duration-300 group-hover:border-ink">
+                        <img 
+                          src={c.image} 
+                          alt={c.label} 
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                        />
+                      </div>
+                      <span className="mt-3 text-[10px] font-medium tracking-[0.16em] uppercase text-ink/85 group-hover:text-gold transition-colors duration-200">
+                        {c.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -119,16 +201,53 @@ export function SiteHeader() {
             </div>
             <div className="my-6 hairline" />
             <nav className="flex flex-col gap-4">
-              {NAV.map((n) => (
-                <Link
-                  key={n.label}
-                  to={n.to}
-                  onClick={() => setOpen(false)}
-                  className="text-sm tracking-[0.18em] uppercase"
-                >
-                  {n.label}
-                </Link>
-              ))}
+              {NAV.map((n) => {
+                if (n.label === "Headwear") {
+                  return (
+                    <div key={n.label} className="flex flex-col">
+                      <button 
+                        onClick={() => setMobileHeadwearOpen(!mobileHeadwearOpen)}
+                        className="flex items-center justify-between text-sm tracking-[0.18em] uppercase text-left py-1 text-ink/80"
+                      >
+                        <span>{n.label}</span>
+                        <span className="text-xs">{mobileHeadwearOpen ? "−" : "+"}</span>
+                      </button>
+                      
+                      {mobileHeadwearOpen && (
+                        <div className="mt-3 pl-4 grid grid-cols-2 gap-3 pb-3 border-l border-hairline">
+                          {HEADWEAR_COLLECTIONS.map((c) => (
+                            <Link
+                              key={c.label}
+                              to="/shop"
+                              search={{ category: "Headwear", subCategory: c.label }}
+                              onClick={() => setOpen(false)}
+                              className="flex items-center gap-3 py-1 group"
+                            >
+                              <div className="h-8 w-8 overflow-hidden bg-ivory border border-hairline rounded">
+                                <img src={c.image} alt={c.label} className="h-full w-full object-cover" />
+                              </div>
+                              <span className="text-[11px] tracking-wider uppercase text-muted-foreground group-hover:text-ink">
+                                {c.label}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+                return (
+                  <Link
+                    key={n.label}
+                    to={n.to}
+                    search={n.search}
+                    onClick={() => setOpen(false)}
+                    className="text-sm tracking-[0.18em] uppercase py-1"
+                  >
+                    {n.label}
+                  </Link>
+                );
+              })}
             </nav>
           </aside>
         </div>

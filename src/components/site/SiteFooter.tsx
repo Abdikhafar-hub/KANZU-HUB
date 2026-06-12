@@ -14,8 +14,9 @@ export function SiteFooter() {
               Where Tradition Meets Class
             </p>
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              A Nairobi-based Islamic fashion house crafting the world's most refined Kanzu,
-              Jubbas, Thobes and Abayas. Made for those who dress with intention.
+              East Africa's Premium Men's Islamic Fashion House crafting the world's most refined
+              Saudi Thobes, Emirati Kanzu, Omani Kanzu, Moroccan Jubbas, Swahili Kanzu, and Bisht.
+              Made for those who dress with intention.
             </p>
             <div className="mt-8 flex items-center gap-4 text-ink">
               <a aria-label="Instagram" href="#" className="hover:text-gold"><Instagram className="h-4 w-4" strokeWidth={1.25} /></a>
@@ -25,11 +26,16 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <FooterCol title="Shop" items={["Kanzu", "Jubbas", "Thobes", "Abayas", "Caps & Tasbih"]} />
-          <FooterCol title="Collections" items={["Saudi", "Emirati", "Omani", "Moroccan", "Eid Edit"]} />
+          <FooterCol title="Shop" items={["Saudi Thobes", "Emirati Kanzu", "Omani Kanzu", "Moroccan Jubbas", "Swahili Kanzu", "Headwear", "Luxury Perfumes"]} />
+          <FooterCol title="Collections" items={["Wedding Collection", "Eid Collection", "Friday Prayer Collection"]} />
           <FooterCol
             title="Company"
-            items={["About Kanzu Bay", "Our Atelier", "Editorial", "Contact"]}
+            items={[
+              { label: "About Kanzu Bay", to: "/about" },
+              { label: "Our Atelier", to: "/about" },
+              { label: "Editorial", to: "/shop" },
+              { label: "Contact", to: "/about" }
+            ]}
           />
 
           <div className="md:col-span-3">
@@ -65,16 +71,42 @@ export function SiteFooter() {
   );
 }
 
-function FooterCol({ title, items }: { title: string; items: string[] }) {
+function FooterCol({
+  title,
+  items,
+}: {
+  title: string;
+  items: Array<string | { label: string; to: string; search?: Record<string, string> }>;
+}) {
   return (
     <div className="md:col-span-2">
       <h4 className="eyebrow">{title}</h4>
       <ul className="mt-4 space-y-3 text-sm text-foreground/80">
-        {items.map((i) => (
-          <li key={i}>
-            <a href="#" className="link-underline">{i}</a>
-          </li>
-        ))}
+        {items.map((item) => {
+          const label = typeof item === "string" ? item : item.label;
+          const to = typeof item === "string" ? "/shop" : item.to;
+          const search =
+            typeof item === "string"
+              ? [
+                  "Saudi Thobes",
+                  "Emirati Kanzu",
+                  "Omani Kanzu",
+                  "Moroccan Jubbas",
+                  "Swahili Kanzu",
+                  "Headwear",
+                  "Luxury Perfumes",
+                ].includes(item)
+                ? { category: item }
+                : undefined
+              : item.search;
+          return (
+            <li key={label}>
+              <Link to={to} search={search} className="link-underline">
+                {label}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

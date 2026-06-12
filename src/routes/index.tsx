@@ -2,12 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Truck, Scissors, Sparkles, Star } from "lucide-react";
-import heroImg from "@/assets/hero.jpg";
+import heroImg from "@/assets/thobe.png";
 import catSaudi from "@/assets/cat-saudi.jpg";
 import catEmirati from "@/assets/cat-emirati.jpg";
 import catOmani from "@/assets/cat-omani.jpg";
 import catMoroccan from "@/assets/cat-moroccan.jpg";
-import catAbaya from "@/assets/cat-abaya.jpg";
+import p4 from "@/assets/p4.png";
 import catAcc from "@/assets/cat-accessories.jpg";
 import eidBanner from "@/assets/eid-banner.jpg";
 import videoPoster from "@/assets/video-poster.jpg";
@@ -20,17 +20,32 @@ import ig6 from "@/assets/ig6.jpg";
 import { products } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 
+// Headwear lifestyle imports
+import lifestyleKumma from "@/assets/lifestyle_kumma.png";
+import lifestyleKufi from "@/assets/lifestyle_kufi.png";
+import lifestyleGhutra from "@/assets/lifestyle_ghutra.png";
+import lifestyleShemagh from "@/assets/lifestyle_shemagh.png";
+import lifestyleKeffiyeh from "@/assets/lifestyle_keffiyeh.png";
+
+const HEADWEAR_LIFESTYLE = [
+  { label: "Omani Kumma", image: lifestyleKumma, subCategory: "Omani Kumma" },
+  { label: "White Kufi", image: lifestyleKufi, subCategory: "Kufi Caps" },
+  { label: "Ghutra + Agal", image: lifestyleGhutra, subCategory: "Ghutra" },
+  { label: "Red Shemagh", image: lifestyleShemagh, subCategory: "Shemagh" },
+  { label: "Keffiyeh", image: lifestyleKeffiyeh, subCategory: "Keffiyeh" },
+];
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Kanzu Bay — Where Tradition Meets Class" },
+      { title: "Kanzu Bay — East Africa's Premium Men's Islamic Fashion House" },
       {
         name: "description",
         content:
-          "Luxury Islamic fashion. Premium Kanzu, Jubbas, Thobes, Abayas and accessories crafted with refined fabrics and elegant tailoring.",
+          "East Africa's Premium Men's Islamic Fashion House. Premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, Moroccan Jubbas, Swahili Kanzu, perfumes, and lifestyle accessories.",
       },
-      { property: "og:title", content: "Kanzu Bay — Where Tradition Meets Class" },
-      { property: "og:description", content: "Premium Islamic fashion crafted in Nairobi." },
+      { property: "og:title", content: "Kanzu Bay — East Africa's Premium Men's Islamic Fashion House" },
+      { property: "og:description", content: "Premium Men's Islamic fashion crafted in Nairobi." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -46,6 +61,7 @@ function Index() {
       <NewArrivals />
       <EidBanner />
       <BestSellers />
+      <TraditionalHeadwearSection />
       <WhyKanzuBay />
       <VideoSection />
       <Reviews />
@@ -61,7 +77,7 @@ function Hero() {
       <div className="relative h-[88vh] min-h-[640px] w-full overflow-hidden bg-ivory">
         <img
           src={heroImg}
-          alt="Model in pristine white Saudi kanzu"
+          alt="Model in premium white Emirati thobe"
           fetchPriority="high"
           className="absolute inset-0 h-full w-full object-cover object-center"
         />
@@ -73,7 +89,7 @@ function Hero() {
               Where Tradition<br /> Meets Class.
             </h1>
             <p className="mt-6 max-w-md text-[15px] leading-relaxed text-foreground/80">
-              A new chapter of Islamic dressing. Refined fabrics, considered tailoring,
+              A new chapter of premium men's Islamic fashion. Refined fabrics, considered tailoring,
               quietly luxurious detail.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -101,11 +117,11 @@ function Hero() {
 }
 
 const CATEGORIES = [
-  { label: "Saudi Kanzu", image: catSaudi, large: true },
+  { label: "Saudi Thobes", image: catSaudi, large: true },
   { label: "Emirati Kanzu", image: catEmirati },
   { label: "Omani Kanzu", image: catOmani },
   { label: "Moroccan Jubbas", image: catMoroccan },
-  { label: "Abayas", image: catAbaya },
+  { label: "Men's Sandals", image: p4 },
   { label: "Accessories", image: catAcc },
 ];
 
@@ -118,6 +134,7 @@ function FeaturedCategories() {
           <Link
             key={c.label}
             to="/shop"
+            search={{ category: c.label }}
             className="group relative block aspect-[3/4] overflow-hidden bg-ivory"
           >
             <img
@@ -150,7 +167,7 @@ function SectionHeader({
   eyebrow: string;
   title: string;
   align?: "center" | "left";
-  cta?: { label: string; to: string };
+  cta?: { label: string; to: string; search?: Record<string, string> };
 }) {
   return (
     <div
@@ -167,6 +184,7 @@ function SectionHeader({
       {cta && (
         <Link
           to={cta.to}
+          search={cta.search}
           className="text-[11px] uppercase tracking-[0.24em] text-ink link-underline"
         >
           {cta.label} →
@@ -208,6 +226,48 @@ function BestSellers() {
         />
         <div className="mt-14 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-4 md:gap-x-8">
           {items.map((p) => <ProductCard key={p.slug} p={p} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TraditionalHeadwearSection() {
+  return (
+    <section className="border-t border-hairline bg-background">
+      <div className="mx-auto max-w-[1440px] px-6 py-24 md:py-32">
+        <SectionHeader
+          eyebrow="Complete Your Look"
+          title="Traditional Headwear Collection"
+          align="center"
+          cta={{ label: "Shop Headwear", to: "/shop", search: { category: "Headwear" } }}
+        />
+        <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5 md:gap-6">
+          {HEADWEAR_LIFESTYLE.map((h) => (
+            <Link
+              key={h.label}
+              to="/shop"
+              search={{ category: "Headwear", subCategory: h.subCategory }}
+              className="group relative block aspect-[3/4] overflow-hidden bg-ivory border border-hairline"
+            >
+              <img
+                src={h.image}
+                alt={h.label}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+              <div className="absolute inset-x-0 bottom-0 flex flex-col p-5 md:p-6 text-white text-left">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-white/70">Collection</span>
+                <h3 className="mt-1 font-display text-lg leading-tight md:text-xl">
+                  {h.label}
+                </h3>
+                <span className="mt-3 text-[10px] uppercase tracking-[0.24em] text-gold opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                  Explore →
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
@@ -317,10 +377,10 @@ const REVIEWS = [
       "The cut, the fabric, the finish — everything about my Saudi Kanzu feels considered. It has replaced everything else in my wardrobe.",
   },
   {
-    name: "Layla M.",
+    name: "Suleiman O.",
     place: "Mombasa",
     quote:
-      "My noir abaya arrived wrapped beautifully and fits like it was made for me. The gold trim is so subtle and so right.",
+      "The Swahili Kanzu from Kanzu Bay has an exceptional drape and the hand-knit collar detailing is pure class. Perfect for Friday prayers.",
   },
   {
     name: "Yusuf K.",

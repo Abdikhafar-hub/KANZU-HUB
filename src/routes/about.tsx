@@ -5,9 +5,9 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — Kanzu Bay" },
-      { name: "description", content: "Kanzu Bay is a Nairobi-based luxury Islamic fashion house crafting Kanzu, Jubbas and Abayas with refined fabrics and elegant tailoring." },
+      { name: "description", content: "Kanzu Bay is East Africa's Premium Men's Islamic Fashion House. Premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, Moroccan Jubbas, and Swahili Kanzu." },
       { property: "og:title", content: "About — Kanzu Bay" },
-      { property: "og:description", content: "Our atelier, our craft." },
+      { property: "og:description", content: "East Africa's Premium Men's Islamic Fashion House." },
       { property: "og:url", content: "/about" },
     ],
     links: [{ rel: "canonical", href: "/about" }],
@@ -24,10 +24,10 @@ function About() {
           A quiet study in modern Islamic dress.
         </h1>
         <p className="mt-8 text-[15px] leading-relaxed text-foreground/80">
-          Kanzu Bay was founded with a singular intention — to make the world's most considered
-          Kanzu, Jubbas, Thobes and Abayas. We pair heritage silhouettes with the discipline
-          of contemporary tailoring, and source from mills that have spent generations perfecting
-          a single craft.
+          Kanzu Bay was founded with a singular intention — to be East Africa's Premium Men's
+          Islamic Fashion House. We pair heritage silhouettes like the Emirati Kanzu, Saudi Thobe,
+          Omani Dishdasha, and Swahili Kanzu with the discipline of contemporary tailoring,
+          sourcing from heritage mills that have spent generations perfecting their craft.
         </p>
       </section>
 

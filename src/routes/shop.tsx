@@ -4,13 +4,24 @@ import { products, type Product } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 import { ChevronDown } from "lucide-react";
 
+type ShopSearch = {
+  category?: string;
+  subCategory?: string;
+};
+
 export const Route = createFileRoute("/shop")({
+  validateSearch: (search: Record<string, unknown>): ShopSearch => {
+    return {
+      category: search.category ? String(search.category) : undefined,
+      subCategory: search.subCategory ? String(search.subCategory) : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Shop — Kanzu Bay" },
-      { name: "description", content: "Shop premium Kanzu, Jubbas, Thobes, Abayas, accessories, perfumes and prayer wear from Kanzu Bay." },
+      { name: "description", content: "Shop premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, Moroccan Jubbas, Swahili Kanzu, Bisht, headwear, perfumes, and lifestyle accessories from Kanzu Bay." },
       { property: "og:title", content: "Shop — Kanzu Bay" },
-      { property: "og:description", content: "The full Kanzu Bay collection." },
+      { property: "og:description", content: "East Africa's Premium Men's Islamic Fashion House." },
       { property: "og:url", content: "/shop" },
     ],
     links: [{ rel: "canonical", href: "/shop" }],
@@ -20,11 +31,18 @@ export const Route = createFileRoute("/shop")({
 
 const CATEGORIES: Array<Product["category"] | "All"> = [
   "All",
-  "Kanzu",
-  "Jubbas",
-  "Abayas",
-  "Accessories",
-  "Perfumes",
+  "Saudi Thobes",
+  "Emirati Kanzu",
+  "Omani Kanzu",
+  "Moroccan Jubbas",
+  "Swahili Kanzu",
+  "Bisht Collection",
+  "Headwear",
+  "Kofia Caps",
+  "Tasbih",
+  "Prayer Mats",
+  "Luxury Perfumes",
+  "Men's Sandals",
 ];
 
 const SORTS = [
@@ -35,30 +53,81 @@ const SORTS = [
 ] as const;
 
 function Shop() {
-  const [cat, setCat] = useState<(typeof CATEGORIES)[number]>("All");
+  const search = Route.useSearch();
+  const navigate = Route.useNavigate();
+  const cat = (search.category && CATEGORIES.includes(search.category as any)
+    ? search.category
+    : "All") as (typeof CATEGORIES)[number];
+
+  const setCat = (newCat: string) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        category: newCat === "All" ? undefined : newCat,
+        subCategory: undefined,
+      }),
+    });
+  };
+
   const [sort, setSort] = useState<(typeof SORTS)[number]["id"]>("featured");
-  const [maxPrice, setMaxPrice] = useState(15000);
+  const [maxPrice, setMaxPrice] = useState(20000);
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => p.price <= maxPrice);
     if (cat !== "All") list = list.filter((p) => p.category === cat);
+    if (search.subCategory) {
+      list = list.filter((p) => p.subCategory === search.subCategory);
+    }
     if (sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
     if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     if (sort === "new") list = [...list].sort((a, b) => (b.badge === "New" ? 1 : 0) - (a.badge === "New" ? 1 : 0));
     return list;
-  }, [cat, sort, maxPrice]);
+  }, [cat, search.subCategory, sort, maxPrice]);
 
   return (
     <div className="bg-background">
       {/* Page header */}
       <div className="mx-auto max-w-[1440px] px-6 pt-16 pb-10 md:pt-24 md:pb-14">
-        <nav className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-          <Link to="/" className="hover:text-ink">Home</Link> <span className="px-2">/</span> Shop
+        <nav className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground flex items-center flex-wrap gap-1">
+          <Link to="/" className="hover:text-ink">Home</Link> <span>/</span> 
+          <Link to="/shop" className="hover:text-ink">Shop</Link>
+          {cat !== "All" && (
+            <>
+              <span>/</span> <span className="text-ink">{cat}</span>
+            </>
+          )}
+          {search.subCategory && (
+            <>
+              <span>/</span> <span className="text-ink">{search.subCategory}</span>
+            </>
+          )}
         </nav>
-        <h1 className="mt-6 font-display text-[40px] leading-tight md:text-[56px]">The Collection</h1>
+        <h1 className="mt-6 font-display text-[40px] leading-tight md:text-[56px]">
+          {search.subCategory || (cat === "All" ? "The Collection" : cat)}
+        </h1>
         <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
           Quietly considered Islamic dress. Each piece is finished in our Nairobi atelier.
         </p>
+        {search.subCategory && (
+          <div className="mt-6 flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">
+              Filtering by: <strong className="text-ink font-semibold">{search.subCategory}</strong>
+            </span>
+            <button
+              onClick={() => {
+                navigate({
+                  search: (prev) => ({
+                    ...prev,
+                    subCategory: undefined,
+                  }),
+                });
+              }}
+              className="text-[10px] uppercase tracking-[0.18em] text-gold hover:text-ink underline underline-offset-4"
+            >
+              Clear subcategory filter
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="border-y border-hairline">
@@ -113,8 +182,8 @@ function Shop() {
           <FilterGroup title="Price">
             <input
               type="range"
-              min={1500}
-              max={15000}
+              min={1200}
+              max={20000}
               step={500}
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}

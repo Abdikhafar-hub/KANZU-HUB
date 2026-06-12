@@ -85,9 +85,9 @@ function ProductPage() {
             </span>
           )}
           <h1 className="mt-4 font-display text-[34px] leading-tight md:text-[44px]">{product.name}</h1>
-          <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-            {product.category}{product.region ? ` · ${product.region}` : ""}
-          </p>
+  <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+    {product.category}
+  </p>
           <p className="mt-6 text-xl tabular-nums text-ink">{formatKES(product.price)}</p>
           <p className="mt-1 text-xs text-muted-foreground">Inclusive of all duties · Free returns within 14 days</p>
 

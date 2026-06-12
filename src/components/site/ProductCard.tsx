@@ -39,7 +39,7 @@ export function ProductCard({ p }: { p: Product }) {
           <div>
             <h3 className="font-display text-[15px] leading-snug text-ink">{p.name}</h3>
             <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              {p.category}{p.region ? ` · ${p.region}` : ""}
+              {p.category}
             </p>
           </div>
           <p className="whitespace-nowrap text-sm tabular-nums text-ink">{formatKES(p.price)}</p>
