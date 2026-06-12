@@ -15,7 +15,7 @@ export function SiteFooter() {
             </p>
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
               East Africa's Premium Men's Islamic Fashion House crafting the world's most refined
-              Saudi Thobes, Emirati Kanzu, Omani Kanzu, Moroccan Jubbas, Swahili Kanzu, and Bisht.
+              Saudi Thobes, Emirati Kanzu, Omani Kanzu, and Swahili Kanzu.
               Made for those who dress with intention.
             </p>
             <div className="mt-8 flex items-center gap-4 text-ink">
@@ -26,7 +26,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <FooterCol title="Shop" items={["Saudi Thobes", "Emirati Kanzu", "Omani Kanzu", "Moroccan Jubbas", "Swahili Kanzu", "Headwear", "Luxury Perfumes"]} />
+          <FooterCol title="Shop" items={["Saudi Thobes", "Emirati Kanzu", "Omani Kanzu", "Swahili Kanzu", "Headwear", "Watches", "Sandals", "Luxury Perfumes"]} />
           <FooterCol title="Collections" items={["Wedding Collection", "Eid Collection", "Friday Prayer Collection"]} />
           <FooterCol
             title="Company"
@@ -91,9 +91,9 @@ function FooterCol({
                   "Saudi Thobes",
                   "Emirati Kanzu",
                   "Omani Kanzu",
-                  "Moroccan Jubbas",
                   "Swahili Kanzu",
                   "Headwear",
+                  "Watches",
                   "Luxury Perfumes",
                 ].includes(item)
                 ? { category: item }

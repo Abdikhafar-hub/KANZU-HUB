@@ -5,7 +5,7 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About — Kanzu Bay" },
-      { name: "description", content: "Kanzu Bay is East Africa's Premium Men's Islamic Fashion House. Premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, Moroccan Jubbas, and Swahili Kanzu." },
+      { name: "description", content: "Kanzu Bay is East Africa's Premium Men's Islamic Fashion House. Premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, and Swahili Kanzu." },
       { property: "og:title", content: "About — Kanzu Bay" },
       { property: "og:description", content: "East Africa's Premium Men's Islamic Fashion House." },
       { property: "og:url", content: "/about" },

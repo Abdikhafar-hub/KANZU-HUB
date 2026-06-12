@@ -42,7 +42,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "East Africa's Premium Men's Islamic Fashion House. Premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, Moroccan Jubbas, Swahili Kanzu, perfumes, and lifestyle accessories.",
+          "East Africa's Premium Men's Islamic Fashion House. Premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, Swahili Kanzu, perfumes, and lifestyle accessories.",
       },
       { property: "og:title", content: "Kanzu Bay — East Africa's Premium Men's Islamic Fashion House" },
       { property: "og:description", content: "Premium Men's Islamic fashion crafted in Nairobi." },
@@ -62,6 +62,7 @@ function Index() {
       <EidBanner />
       <BestSellers />
       <TraditionalHeadwearSection />
+      <CompleteTheLook />
       <WhyKanzuBay />
       <VideoSection />
       <Reviews />
@@ -120,8 +121,7 @@ const CATEGORIES = [
   { label: "Saudi Thobes", image: catSaudi, large: true },
   { label: "Emirati Kanzu", image: catEmirati },
   { label: "Omani Kanzu", image: catOmani },
-  { label: "Moroccan Jubbas", image: catMoroccan },
-  { label: "Men's Sandals", image: p4 },
+  { label: "Swahili Kanzu", image: p4 },
   { label: "Accessories", image: catAcc },
 ];
 
@@ -268,6 +268,77 @@ function TraditionalHeadwearSection() {
               </div>
             </Link>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CompleteTheLook() {
+  const outfitSlugs = [
+    "swahili-kanzu-mombasa",
+    "royal-omani-kumma",
+    "oud-tansoor",
+    "omani-royal-heritage-tan",
+  ];
+  const outfitItems = products.filter((p) => outfitSlugs.includes(p.slug));
+  const total = outfitItems.reduce((acc, p) => acc + p.price, 0);
+
+  return (
+    <section className="border-t border-hairline bg-background">
+      <div className="mx-auto max-w-[1440px] px-6 py-24 md:py-32">
+        <SectionHeader
+          eyebrow="Curated Ensemble"
+          title="Complete The Look"
+          align="left"
+        />
+        
+        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_400px]">
+          {/* Grid of the 4 items */}
+          <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-4 md:gap-x-8 lg:grid-cols-4">
+            {outfitItems.map((p) => (
+              <div key={p.slug} className="flex flex-col">
+                <ProductCard p={p} />
+                <span className="mt-2 text-[10px] text-muted-foreground uppercase tracking-wider">
+                  {p.category === "Watches" ? "Luxury Accessory" : p.category}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Bundle purchase summary card */}
+          <div className="border border-hairline bg-ivory p-6 md:p-8 flex flex-col justify-between h-fit">
+            <div>
+              <p className="eyebrow text-gold">The Friday / Eid Ensemble</p>
+              <h3 className="mt-2 font-display text-2xl">Complete Look</h3>
+              <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
+                A carefully curated outfit composition matching our Mombasa White Linen Kanzu with hand-knit detailing, an embroidered Royal Omani Kumma, our rich Cambodian Oud Tansoor attar, and hand-crafted traditional Arabic leather sandals.
+              </p>
+              <div className="my-6 hairline" />
+              <ul className="space-y-3">
+                {outfitItems.map((p) => (
+                  <li key={p.slug} className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground truncate max-w-[220px]">{p.name}</span>
+                    <span className="font-mono text-ink">KES {p.price.toLocaleString("en-KE")}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div className="my-6 hairline" />
+              <div className="flex items-end justify-between">
+                <span className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Ensemble Total</span>
+                <span className="text-lg font-semibold tabular-nums text-ink">KES {total.toLocaleString("en-KE")}</span>
+              </div>
+              <button 
+                type="button" 
+                className="mt-6 w-full bg-ink py-4 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-foreground transition-all duration-300"
+                onClick={() => alert("All 4 items have been added to your shopping bag.")}
+              >
+                Add Entire Look to Bag
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

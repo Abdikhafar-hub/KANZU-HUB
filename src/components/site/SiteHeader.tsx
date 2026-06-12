@@ -12,6 +12,9 @@ import keffiyeh from "@/assets/keffiyeh.png";
 import agal from "@/assets/agal.png";
 import imamah from "@/assets/imamah.png";
 
+// Watches product imports for mega menu
+import dressWatch from "@/assets/dress_watch.png";
+
 const HEADWEAR_COLLECTIONS = [
   { label: "Kufi Caps", image: kufiCap },
   { label: "Taqiyah", image: taqiyahCap },
@@ -23,16 +26,26 @@ const HEADWEAR_COLLECTIONS = [
   { label: "Imamah", image: imamah },
 ];
 
+const WATCH_COLLECTIONS = [
+  { label: "Dress Watches", image: dressWatch },
+  { label: "Arabic Dial Watches", image: dressWatch },
+  { label: "Classic Collection", image: dressWatch },
+  { label: "Gold Collection", image: dressWatch },
+  { label: "Silver Collection", image: dressWatch },
+  { label: "Premium Collection", image: dressWatch },
+  { label: "Smart Watches", image: dressWatch },
+];
+
 const NAV: { label: string; to: string; search?: Record<string, string> }[] = [
   { label: "Shop All", to: "/shop" },
   { label: "Saudi Thobes", to: "/shop", search: { category: "Saudi Thobes" } },
   { label: "Emirati Kanzu", to: "/shop", search: { category: "Emirati Kanzu" } },
   { label: "Omani Kanzu", to: "/shop", search: { category: "Omani Kanzu" } },
-  { label: "Moroccan Jubbas", to: "/shop", search: { category: "Moroccan Jubbas" } },
   { label: "Swahili Kanzu", to: "/shop", search: { category: "Swahili Kanzu" } },
-  { label: "Bisht", to: "/shop", search: { category: "Bisht Collection" } },
-  { label: "Perfumes", to: "/shop", search: { category: "Luxury Perfumes" } },
+  { label: "Fragrances", to: "/shop", search: { category: "Luxury Perfumes" } },
   { label: "Headwear", to: "/shop", search: { category: "Headwear" } },
+  { label: "Sandals", to: "/shop", search: { category: "Men's Sandals" } },
+  { label: "Watches", to: "/shop", search: { category: "Watches" } },
   { label: "About", to: "/about" },
 ];
 
@@ -41,6 +54,8 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [headwearHovered, setHeadwearHovered] = useState(false);
   const [mobileHeadwearOpen, setMobileHeadwearOpen] = useState(false);
+  const [watchesHovered, setWatchesHovered] = useState(false);
+  const [mobileWatchesOpen, setMobileWatchesOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -115,7 +130,10 @@ export function SiteHeader() {
         {/* Secondary nav (desktop) */}
         <div 
           className="relative hidden border-t border-hairline lg:block"
-          onMouseLeave={() => setHeadwearHovered(false)}
+          onMouseLeave={() => {
+            setHeadwearHovered(false);
+            setWatchesHovered(false);
+          }}
         >
           <nav className="mx-auto flex max-w-[1440px] items-center justify-center gap-10 px-6 py-3">
             {NAV.map((n) => {
@@ -124,7 +142,10 @@ export function SiteHeader() {
                   <div 
                     key={n.label}
                     className="relative py-1"
-                    onMouseEnter={() => setHeadwearHovered(true)}
+                    onMouseEnter={() => {
+                      setHeadwearHovered(true);
+                      setWatchesHovered(false);
+                    }}
                   >
                     <Link
                       to={n.to}
@@ -136,12 +157,35 @@ export function SiteHeader() {
                   </div>
                 );
               }
+              if (n.label === "Watches") {
+                return (
+                  <div 
+                    key={n.label}
+                    className="relative py-1"
+                    onMouseEnter={() => {
+                      setWatchesHovered(true);
+                      setHeadwearHovered(false);
+                    }}
+                  >
+                    <Link
+                      to={n.to}
+                      search={n.search}
+                      className={`text-[11px] tracking-[0.22em] uppercase transition-colors duration-200 ${watchesHovered ? 'text-gold' : 'text-ink/80 hover:text-ink'}`}
+                    >
+                      {n.label}
+                    </Link>
+                  </div>
+                );
+              }
               return (
                 <Link
                   key={n.label}
                   to={n.to}
                   search={n.search}
-                  onMouseEnter={() => setHeadwearHovered(false)}
+                  onMouseEnter={() => {
+                    setHeadwearHovered(false);
+                    setWatchesHovered(false);
+                  }}
                   className="text-[11px] tracking-[0.22em] uppercase text-ink/80 hover:text-ink py-1"
                 >
                   {n.label}
@@ -150,11 +194,14 @@ export function SiteHeader() {
             })}
           </nav>
 
-          {/* Mega Menu panel */}
+          {/* Headwear Mega Menu panel */}
           {headwearHovered && (
             <div 
               className="absolute left-0 right-0 top-full z-40 border-b border-hairline bg-background shadow-lg transition-all duration-300"
-              onMouseEnter={() => setHeadwearHovered(true)}
+              onMouseEnter={() => {
+                setHeadwearHovered(true);
+                setWatchesHovered(false);
+              }}
               onMouseLeave={() => setHeadwearHovered(false)}
             >
               <div className="mx-auto max-w-[1440px] px-6 py-10">
@@ -166,6 +213,43 @@ export function SiteHeader() {
                       search={{ category: "Headwear", subCategory: c.label }}
                       className="group flex flex-col items-center text-center"
                       onClick={() => setHeadwearHovered(false)}
+                    >
+                      <div className="aspect-square w-full overflow-hidden bg-ivory border border-hairline transition-all duration-300 group-hover:border-ink">
+                        <img 
+                          src={c.image} 
+                          alt={c.label} 
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                        />
+                      </div>
+                      <span className="mt-3 text-[10px] font-medium tracking-[0.16em] uppercase text-ink/85 group-hover:text-gold transition-colors duration-200">
+                        {c.label}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Watches Mega Menu panel */}
+          {watchesHovered && (
+            <div 
+              className="absolute left-0 right-0 top-full z-40 border-b border-hairline bg-background shadow-lg transition-all duration-300"
+              onMouseEnter={() => {
+                setWatchesHovered(true);
+                setHeadwearHovered(false);
+              }}
+              onMouseLeave={() => setWatchesHovered(false)}
+            >
+              <div className="mx-auto max-w-[1440px] px-6 py-10">
+                <div className="grid grid-cols-8 gap-4">
+                  {WATCH_COLLECTIONS.map((c) => (
+                    <Link
+                      key={c.label}
+                      to="/shop"
+                      search={{ category: "Watches", subCategory: c.label }}
+                      className="group flex flex-col items-center text-center"
+                      onClick={() => setWatchesHovered(false)}
                     >
                       <div className="aspect-square w-full overflow-hidden bg-ivory border border-hairline transition-all duration-300 group-hover:border-ink">
                         <img 
@@ -220,6 +304,40 @@ export function SiteHeader() {
                               key={c.label}
                               to="/shop"
                               search={{ category: "Headwear", subCategory: c.label }}
+                              onClick={() => setOpen(false)}
+                              className="flex items-center gap-3 py-1 group"
+                            >
+                              <div className="h-8 w-8 overflow-hidden bg-ivory border border-hairline rounded">
+                                <img src={c.image} alt={c.label} className="h-full w-full object-cover" />
+                              </div>
+                              <span className="text-[11px] tracking-wider uppercase text-muted-foreground group-hover:text-ink">
+                                {c.label}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+                if (n.label === "Watches") {
+                  return (
+                    <div key={n.label} className="flex flex-col">
+                      <button 
+                        onClick={() => setMobileWatchesOpen(!mobileWatchesOpen)}
+                        className="flex items-center justify-between text-sm tracking-[0.18em] uppercase text-left py-1 text-ink/80"
+                      >
+                        <span>{n.label}</span>
+                        <span className="text-xs">{mobileWatchesOpen ? "−" : "+"}</span>
+                      </button>
+                      
+                      {mobileWatchesOpen && (
+                        <div className="mt-3 pl-4 grid grid-cols-2 gap-3 pb-3 border-l border-hairline">
+                          {WATCH_COLLECTIONS.map((c) => (
+                            <Link
+                              key={c.label}
+                              to="/shop"
+                              search={{ category: "Watches", subCategory: c.label }}
                               onClick={() => setOpen(false)}
                               className="flex items-center gap-3 py-1 group"
                             >

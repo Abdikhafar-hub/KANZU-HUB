@@ -46,6 +46,7 @@ function ProductPage() {
   const [qty, setQty] = useState(1);
 
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
+  const pairsWell = products.filter((p) => product.pairsWellWith?.includes(p.slug));
 
   return (
     <div className="bg-background">
@@ -94,6 +95,82 @@ function ProductPage() {
           <div className="my-8 hairline" />
 
           <p className="text-[15px] leading-relaxed text-foreground/80">{product.description}</p>
+
+          {/* Specifications for Watches */}
+          {product.category === "Watches" && product.specs && (
+            <div className="mt-8 border-t border-hairline pt-6">
+              <h4 className="text-[11px] uppercase tracking-[0.22em] text-ink font-semibold">Specifications</h4>
+              <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
+                {product.specs.caseSize && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Case Size</span>
+                    <span className="font-medium text-ink">{product.specs.caseSize}</span>
+                  </div>
+                )}
+                {product.specs.strapMaterial && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Strap</span>
+                    <span className="font-medium text-ink">{product.specs.strapMaterial}</span>
+                  </div>
+                )}
+                {product.specs.movement && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Movement</span>
+                    <span className="font-medium text-ink">{product.specs.movement}</span>
+                  </div>
+                )}
+                {product.specs.waterResistance && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Water Resistance</span>
+                    <span className="font-medium text-ink">{product.specs.waterResistance}</span>
+                  </div>
+                )}
+              </div>
+              {product.specs.stylingRecommendations && (
+                <div className="mt-4 text-xs text-muted-foreground leading-relaxed italic bg-ivory p-4 border border-hairline rounded">
+                  <strong>Styling Note:</strong> {product.specs.stylingRecommendations}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Specifications for Sandals */}
+          {product.category === "Men's Sandals" && product.specs && (
+            <div className="mt-8 border-t border-hairline pt-6">
+              <h4 className="text-[11px] uppercase tracking-[0.22em] text-ink font-semibold">Specifications</h4>
+              <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
+                {product.specs.material && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Material</span>
+                    <span className="font-medium text-ink">{product.specs.material}</span>
+                  </div>
+                )}
+                {product.specs.leatherType && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Leather Type</span>
+                    <span className="font-medium text-ink">{product.specs.leatherType}</span>
+                  </div>
+                )}
+                {product.specs.soleType && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Sole Type</span>
+                    <span className="font-medium text-ink">{product.specs.soleType}</span>
+                  </div>
+                )}
+                {product.specs.comfort && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Comfort</span>
+                    <span className="font-medium text-ink">{product.specs.comfort}</span>
+                  </div>
+                )}
+              </div>
+              {product.specs.stylingRecommendations && (
+                <div className="mt-4 text-xs text-muted-foreground leading-relaxed italic bg-ivory p-4 border border-hairline rounded">
+                  <strong>Styling Note:</strong> {product.specs.stylingRecommendations}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Colour */}
           <div className="mt-10">
@@ -181,6 +258,26 @@ function ProductPage() {
           </div>
         </div>
       </div>
+
+      {/* Pairs Well With */}
+      {pairsWell.length > 0 && (
+        <section className="border-t border-hairline bg-ivory">
+          <div className="mx-auto max-w-[1440px] px-6 py-20 md:py-28">
+            <p className="eyebrow text-center">Curated Ensemble</p>
+            <h2 className="mt-3 font-display text-3xl md:text-4xl text-center">Pairs Well With</h2>
+            <div className="mt-12 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 md:gap-x-8 lg:grid-cols-3 justify-center max-w-5xl mx-auto">
+              {pairsWell.map((p) => (
+                <div key={p.slug} className="flex flex-col">
+                  <ProductCard p={p} />
+                  <span className="mt-2 text-[10px] text-muted-foreground uppercase tracking-wider text-center">
+                    {p.category}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Related */}
       <section className="border-t border-hairline">

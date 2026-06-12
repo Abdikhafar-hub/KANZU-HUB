@@ -19,7 +19,7 @@ export const Route = createFileRoute("/shop")({
   head: () => ({
     meta: [
       { title: "Shop — Kanzu Bay" },
-      { name: "description", content: "Shop premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, Moroccan Jubbas, Swahili Kanzu, Bisht, headwear, perfumes, and lifestyle accessories from Kanzu Bay." },
+      { name: "description", content: "Shop premium Saudi Thobes, Emirati Kanzu, Omani Kanzu, Swahili Kanzu, sandals, headwear, watches, perfumes, and lifestyle accessories from Kanzu Bay." },
       { property: "og:title", content: "Shop — Kanzu Bay" },
       { property: "og:description", content: "East Africa's Premium Men's Islamic Fashion House." },
       { property: "og:url", content: "/shop" },
@@ -34,10 +34,9 @@ const CATEGORIES: Array<Product["category"] | "All"> = [
   "Saudi Thobes",
   "Emirati Kanzu",
   "Omani Kanzu",
-  "Moroccan Jubbas",
   "Swahili Kanzu",
-  "Bisht Collection",
   "Headwear",
+  "Watches",
   "Kofia Caps",
   "Tasbih",
   "Prayer Mats",
@@ -70,7 +69,7 @@ function Shop() {
   };
 
   const [sort, setSort] = useState<(typeof SORTS)[number]["id"]>("featured");
-  const [maxPrice, setMaxPrice] = useState(20000);
+  const [maxPrice, setMaxPrice] = useState(25000);
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => p.price <= maxPrice);
@@ -183,7 +182,7 @@ function Shop() {
             <input
               type="range"
               min={1200}
-              max={20000}
+              max={25000}
               step={500}
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
