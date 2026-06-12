@@ -38,10 +38,7 @@ const WATCH_COLLECTIONS = [
 
 const NAV: { label: string; to: string; search?: Record<string, string> }[] = [
   { label: "Shop All", to: "/shop" },
-  { label: "Saudi Thobes", to: "/shop", search: { category: "Saudi Thobes" } },
-  { label: "Emirati Kanzu", to: "/shop", search: { category: "Emirati Kanzu" } },
-  { label: "Omani Kanzu", to: "/shop", search: { category: "Omani Kanzu" } },
-  { label: "Swahili Kanzu", to: "/shop", search: { category: "Swahili Kanzu" } },
+  { label: "Thobes", to: "/shop", search: { category: "Thobes" } },
   { label: "Fragrances", to: "/shop", search: { category: "Luxury Perfumes" } },
   { label: "Headwear", to: "/shop", search: { category: "Headwear" } },
   { label: "Sandals", to: "/shop", search: { category: "Men's Sandals" } },

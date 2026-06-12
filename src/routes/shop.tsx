@@ -29,12 +29,9 @@ export const Route = createFileRoute("/shop")({
   component: Shop,
 });
 
-const CATEGORIES: Array<Product["category"] | "All"> = [
+const CATEGORIES: Array<Product["category"] | "All" | "Thobes"> = [
   "All",
-  "Saudi Thobes",
-  "Emirati Kanzu",
-  "Omani Kanzu",
-  "Swahili Kanzu",
+  "Thobes",
   "Headwear",
   "Watches",
   "Kofia Caps",
@@ -73,7 +70,15 @@ function Shop() {
 
   const filtered = useMemo(() => {
     let list = products.filter((p) => p.price <= maxPrice);
-    if (cat !== "All") list = list.filter((p) => p.category === cat);
+    if (cat !== "All") {
+      if (cat === "Thobes") {
+        list = list.filter((p) =>
+          ["Saudi Thobes", "Emirati Kanzu", "Omani Kanzu", "Swahili Kanzu"].includes(p.category)
+        );
+      } else {
+        list = list.filter((p) => p.category === cat);
+      }
+    }
     if (search.subCategory) {
       list = list.filter((p) => p.subCategory === search.subCategory);
     }
@@ -86,7 +91,7 @@ function Shop() {
   return (
     <div className="bg-background">
       {/* Page header */}
-      <div className="mx-auto max-w-[1440px] px-6 pt-16 pb-10 md:pt-24 md:pb-14">
+      <div className="mx-auto max-w-[1440px] px-6 pt-8 pb-5 md:pt-12 md:pb-7">
         <nav className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground flex items-center flex-wrap gap-1">
           <Link to="/" className="hover:text-ink">Home</Link> <span>/</span> 
           <Link to="/shop" className="hover:text-ink">Shop</Link>

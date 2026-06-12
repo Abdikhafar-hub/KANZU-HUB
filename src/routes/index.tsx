@@ -9,6 +9,8 @@ import catOmani from "@/assets/cat-omani.jpg";
 import catMoroccan from "@/assets/cat-moroccan.jpg";
 import p4 from "@/assets/p4.png";
 import catAcc from "@/assets/cat-accessories.jpg";
+import watchImage from "@/assets/watch_arabic_silver.jpg";
+import sandalImage from "@/assets/sandal8.webp";
 import eidBanner from "@/assets/eid-banner.jpg";
 import videoPoster from "@/assets/video-poster.jpg";
 import ig1 from "@/assets/ig1.jpg";
@@ -118,10 +120,10 @@ function Hero() {
 }
 
 const CATEGORIES = [
-  { label: "Saudi Thobes", image: catSaudi, large: true },
-  { label: "Emirati Kanzu", image: catEmirati },
-  { label: "Omani Kanzu", image: catOmani },
-  { label: "Swahili Kanzu", image: p4 },
+  { label: "Thobes", image: catSaudi, large: true },
+  { label: "Men's Sandals", image: sandalImage },
+  { label: "Watches", image: watchImage },
+  { label: "Headwear", image: catOmani },
   { label: "Accessories", image: catAcc },
 ];
 

@@ -26,7 +26,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <FooterCol title="Shop" items={["Saudi Thobes", "Emirati Kanzu", "Omani Kanzu", "Swahili Kanzu", "Headwear", "Watches", "Sandals", "Luxury Perfumes"]} />
+          <FooterCol title="Shop" items={[{ label: "Thobes", to: "/shop", search: { category: "Thobes" } }, "Headwear", "Watches", "Sandals", "Luxury Perfumes"]} />
           <FooterCol title="Collections" items={["Wedding Collection", "Eid Collection", "Friday Prayer Collection"]} />
           <FooterCol
             title="Company"
