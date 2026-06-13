@@ -84,50 +84,6 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 bg-background">
-      <div className="w-full bg-ink text-[11px] tracking-[0.18em] uppercase text-white">
-        <div className="mx-auto flex h-9 max-w-[1440px] items-center justify-between px-6">
-          <div className="hidden sm:block w-36"></div>
-          <span className="font-medium text-center flex-1">
-            Complimentary Nairobi Delivery on All Boutique Orders
-          </span>
-          <div className="hidden sm:flex items-center justify-end gap-4 w-36">
-            <a
-              href="https://tiktok.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-gold transition-colors"
-              aria-label="TikTok"
-            >
-              <TiktokIcon className="h-3.5 w-3.5" strokeWidth={1.5} />
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-gold transition-colors"
-              aria-label="Instagram"
-            >
-              <Instagram className="h-3.5 w-3.5" strokeWidth={1.5} />
-            </a>
-            <a
-              href="https://wa.me/254700000000"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-gold transition-colors"
-              aria-label="WhatsApp"
-            >
-              <MessageCircle className="h-3.5 w-3.5" strokeWidth={1.5} />
-            </a>
-            <a
-              href="tel:+254700000000"
-              className="hover:text-gold transition-colors"
-              aria-label="Phone"
-            >
-              <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
-            </a>
-          </div>
-        </div>
-      </div>
 
       <div
         className={`border-b border-hairline transition-shadow ${
