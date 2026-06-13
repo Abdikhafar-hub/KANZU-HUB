@@ -152,11 +152,8 @@ export function SiteHeader() {
 
           {/* Center: wordmark */}
           <Link to="/" className="text-center select-none">
-            <span className="block font-display text-lg tracking-[0.24em] leading-none text-gold-secondary sm:text-xl md:text-[26px] md:tracking-[0.32em]">
+            <span className="block font-display text-[13px] tracking-[0.2em] leading-none text-gold-secondary whitespace-nowrap sm:text-lg sm:tracking-[0.24em] md:text-[26px] md:tracking-[0.32em]">
               KANZU BAY
-            </span>
-            <span className="mt-1 block text-[7px] tracking-[0.18em] uppercase text-muted-foreground sm:text-[8px] sm:tracking-[0.24em] md:text-[9px] md:tracking-[0.32em]">
-              Where Tradition Meets Class
             </span>
           </Link>
 
