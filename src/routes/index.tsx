@@ -83,11 +83,14 @@ function Hero() {
   return (
     <section className="relative">
       <div className="relative h-[88vh] min-h-[640px] w-full overflow-hidden bg-ivory">
-        <img
-          src={heroImg}
-          alt="Model in premium white Emirati thobe"
-          fetchPriority="high"
+        <video
+          src="https://res.cloudinary.com/djohzzbhz/video/upload/v1781314833/rename_vfosgg.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
           className="absolute inset-0 h-full w-full object-cover object-center"
+          poster={heroImg}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/10 to-transparent" />
         <div className="relative z-10 mx-auto flex h-full max-w-[1440px] items-center px-6 md:px-12">
