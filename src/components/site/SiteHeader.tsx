@@ -134,7 +134,7 @@ export function SiteHeader() {
           scrolled ? "shadow-[0_1px_0_rgba(0,0,0,0.04)]" : ""
         }`}
       >
-        <div className="mx-auto grid h-20 max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-6">
+        <div className="mx-auto relative flex h-20 max-w-[1440px] items-center justify-between gap-4 px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:justify-items-stretch">
           {/* Left: mobile menu + nav */}
           <div className="flex items-center gap-2">
             <nav className="hidden items-center gap-8 lg:flex">
@@ -151,7 +151,7 @@ export function SiteHeader() {
           </div>
 
           {/* Center: wordmark */}
-          <Link to="/" className="text-center select-none">
+          <Link to="/" className="text-center select-none lg:static absolute left-1/2 -translate-x-1/2 z-10">
             <span className="block font-display text-[13px] tracking-[0.2em] leading-none text-gold-secondary whitespace-nowrap sm:text-lg sm:tracking-[0.24em] md:text-[26px] md:tracking-[0.32em]">
               KANZU BAY
             </span>
@@ -160,8 +160,12 @@ export function SiteHeader() {
           {/* Right: icons */}
           <div className="flex items-center justify-end gap-1 text-ink">
             <IconButton label="Search"><Search className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
-            <IconButton label="Wishlist"><Heart className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
-            <IconButton label="Account"><User className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
+            <div className="hidden sm:block">
+              <IconButton label="Wishlist"><Heart className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
+            </div>
+            <div className="hidden sm:block">
+              <IconButton label="Account"><User className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
+            </div>
             <IconButton 
               label="Inquiry List" 
               badge={inquiryCount > 0 ? String(inquiryCount) : undefined}

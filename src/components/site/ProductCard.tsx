@@ -39,8 +39,8 @@ export function ProductCard({ p }: { p: Product }) {
             </span>
           </div>
         </div>
-        <div className="mt-4 flex items-center justify-between gap-3">
-          <div>
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+          <div className="min-w-0">
             <h3 className="font-display text-[15px] leading-snug text-ink">{p.name}</h3>
             <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
               {p.category}
@@ -53,7 +53,7 @@ export function ProductCard({ p }: { p: Product }) {
               e.stopPropagation();
               openInquiryModal(p);
             }}
-            className="whitespace-nowrap bg-ink px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] text-white hover:bg-gold hover:text-ink transition-colors duration-200 font-medium"
+            className="w-full sm:w-auto whitespace-nowrap bg-ink px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] text-white hover:bg-gold hover:text-ink transition-colors duration-200 font-medium text-center"
           >
             Inquire Price
           </button>
