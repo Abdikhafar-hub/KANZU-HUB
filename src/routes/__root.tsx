@@ -13,6 +13,9 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/site/SiteHeader";
 import { SiteFooter } from "../components/site/SiteFooter";
+import { InquiryProvider } from "../context/InquiryContext";
+import { InquiryModal } from "../components/site/InquiryModal";
+import { InquiryDrawer } from "../components/site/InquiryDrawer";
 
 function NotFoundComponent() {
   return (
@@ -126,13 +129,17 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background">
-        <SiteHeader />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
+      <InquiryProvider>
+        <div className="flex min-h-screen flex-col bg-background">
+          <SiteHeader />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <SiteFooter />
+        </div>
+        <InquiryModal />
+        <InquiryDrawer />
+      </InquiryProvider>
     </QueryClientProvider>
   );
 }

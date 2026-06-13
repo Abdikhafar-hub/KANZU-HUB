@@ -29,23 +29,23 @@ export const Route = createFileRoute("/shop")({
   component: Shop,
 });
 
-const CATEGORIES: Array<Product["category"] | "All" | "Thobes"> = [
+const CATEGORIES: Array<Product["category"] | "All" | "Thobes" | "Accessories"> = [
   "All",
   "Thobes",
+  "Overtops",
+  "Traditional Canes",
   "Headwear",
   "Watches",
-  "Kofia Caps",
+  "Undergarments",
   "Tasbih",
   "Prayer Mats",
-  "Luxury Perfumes",
   "Men's Sandals",
+  "Accessories",
 ];
 
 const SORTS = [
   { id: "featured", label: "Featured" },
   { id: "new", label: "Newest" },
-  { id: "price-asc", label: "Price: Low to High" },
-  { id: "price-desc", label: "Price: High to Low" },
 ] as const;
 
 function Shop() {
@@ -66,14 +66,17 @@ function Shop() {
   };
 
   const [sort, setSort] = useState<(typeof SORTS)[number]["id"]>("featured");
-  const [maxPrice, setMaxPrice] = useState(25000);
 
   const filtered = useMemo(() => {
-    let list = products.filter((p) => p.price <= maxPrice);
+    let list = products;
     if (cat !== "All") {
       if (cat === "Thobes") {
         list = list.filter((p) =>
           ["Saudi Thobes", "Emirati Kanzu", "Omani Kanzu", "Swahili Kanzu"].includes(p.category)
+        );
+      } else if (cat === "Accessories") {
+        list = list.filter((p) =>
+          ["Tasbih", "Prayer Mats", "Traditional Canes"].includes(p.category)
         );
       } else {
         list = list.filter((p) => p.category === cat);
@@ -82,11 +85,9 @@ function Shop() {
     if (search.subCategory) {
       list = list.filter((p) => p.subCategory === search.subCategory);
     }
-    if (sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
-    if (sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
     if (sort === "new") list = [...list].sort((a, b) => (b.badge === "New" ? 1 : 0) - (a.badge === "New" ? 1 : 0));
     return list;
-  }, [cat, search.subCategory, sort, maxPrice]);
+  }, [cat, search.subCategory, sort]);
 
   return (
     <div className="bg-background">
@@ -106,12 +107,53 @@ function Shop() {
             </>
           )}
         </nav>
-        <h1 className="mt-6 font-display text-[40px] leading-tight md:text-[56px]">
-          {search.subCategory || (cat === "All" ? "The Collection" : cat)}
-        </h1>
-        <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Quietly considered Islamic dress. Each piece is finished in our Nairobi atelier.
-        </p>
+        {cat === "Undergarments" && !search.subCategory ? (
+          <div className="mt-8 relative overflow-hidden bg-[#181615] border border-hairline p-8 md:p-16 text-white flex flex-col justify-end min-h-[280px] md:min-h-[360px] rounded-sm">
+            {/* Background design representing luxury editorial style - folded white garments on wood with soft lighting */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-stone-950 via-stone-900/90 to-stone-950/80" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,_rgba(139,92,26,0.1),_transparent_60%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,_rgba(255,255,255,0.03),_transparent_40%)]" />
+            <div className="absolute right-0 top-0 bottom-0 w-full md:w-1/2 opacity-35 bg-[url('/assets/omani7.jpeg')] bg-cover bg-center mix-blend-luminosity grayscale contrast-125" />
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-transparent md:bg-gradient-to-r md:from-stone-950 md:via-stone-950/60 md:to-transparent" />
+            
+            <div className="relative z-10 max-w-lg">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-semibold">Atelier Foundation Collection</span>
+              <h2 className="mt-3 font-display text-[44px] leading-none md:text-[60px] tracking-wide text-white uppercase font-light">
+                Undergarments
+              </h2>
+              <p className="mt-4 text-xs md:text-sm leading-relaxed text-stone-300 font-light max-w-md">
+                Premium Foundations For Everyday Wear. Breathable, lightweight base layers engineered for comfort and structure under premium Islamic attire.
+              </p>
+            </div>
+          </div>
+        ) : cat === "Tasbih" && !search.subCategory ? (
+          <div className="mt-8 relative overflow-hidden bg-[#131110] border border-hairline p-8 md:p-16 text-white flex flex-col justify-end min-h-[280px] md:min-h-[360px] rounded-sm">
+            {/* Background design representing luxury editorial style - wood table, folded white kanzu, oud bottle, tasbih */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-stone-950 via-stone-900/95 to-[#1a1512]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,_rgba(212,175,55,0.1),_transparent_50%)]" />
+            <div className="absolute right-0 top-0 bottom-0 w-full md:w-1/2 opacity-40 bg-[url('/assets/ig4.jpg')] bg-cover bg-center mix-blend-luminosity contrast-110 brightness-75" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#131110] via-[#131110]/50 to-transparent md:bg-gradient-to-r md:from-[#131110] md:via-[#131110]/70 md:to-transparent" />
+            
+            <div className="relative z-10 max-w-lg">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-semibold">Spiritual & Heritage Collection</span>
+              <h1 className="mt-3 font-display text-[44px] leading-none md:text-[60px] tracking-wide text-white uppercase font-light">
+                Tasbih Collection
+              </h1>
+              <p className="mt-4 text-xs md:text-sm leading-relaxed text-stone-300 font-light max-w-md">
+                Crafted For Reflection & Tradition. Premium prayer beads shaped from olive wood, sandalwood, amber, and fine gemstones. Gift-worthy accompaniments of quiet elegance.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <>
+            <h1 className="mt-6 font-display text-[40px] leading-tight md:text-[56px]">
+              {search.subCategory || (cat === "All" ? "The Collection" : cat)}
+            </h1>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              Quietly considered Islamic dress. Each piece is finished in our Nairobi atelier.
+            </p>
+          </>
+        )}
         {search.subCategory && (
           <div className="mt-6 flex items-center gap-2">
             <span className="text-xs text-muted-foreground">
@@ -183,18 +225,7 @@ function Shop() {
               ))}
             </ul>
           </FilterGroup>
-          <FilterGroup title="Price">
-            <input
-              type="range"
-              min={1200}
-              max={25000}
-              step={500}
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-              className="w-full accent-ink"
-            />
-            <p className="mt-2 text-xs text-muted-foreground">Up to KES {maxPrice.toLocaleString()}</p>
-          </FilterGroup>
+
           <FilterGroup title="Size">
             <div className="flex flex-wrap gap-2">
               {["S", "M", "L", "XL", "XXL"].map((s) => (
@@ -210,7 +241,7 @@ function Shop() {
                 <button
                   key={c}
                   aria-label={c}
-                  className="h-6 w-6 rounded-full border border-hairline"
+                  className="h-6 w-6 rounded-full border border-hairline hover:border-ink transition-all hover:scale-105"
                   style={{ background: c }}
                 />
               ))}
@@ -233,7 +264,7 @@ function Shop() {
             {[1, 2, 3].map((n) => (
               <button
                 key={n}
-                className={`h-9 w-9 text-xs ${n === 1 ? "bg-ink text-white" : "border border-hairline hover:border-ink"}`}
+                className={`h-9 w-9 text-xs transition-colors duration-200 ${n === 1 ? "bg-ink text-white hover:bg-gold hover:text-ink" : "border border-hairline hover:border-gold hover:text-gold"}`}
               >
                 {n}
               </button>

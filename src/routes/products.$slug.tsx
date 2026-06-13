@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Heart, MessageCircle, Truck, RefreshCw, ShieldCheck } from "lucide-react";
-import { getProduct, products, formatKES } from "@/lib/products";
+import { getProduct, products, isPremiumProduct } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
+import { useInquiry } from "@/context/InquiryContext";
 
 export const Route = createFileRoute("/products/$slug")({
   loader: ({ params }) => {
@@ -44,9 +45,19 @@ function ProductPage() {
   const [color, setColor] = useState(product.colors[0]);
   const [size, setSize] = useState(product.sizes[0]);
   const [qty, setQty] = useState(1);
+  const [activeImage, setActiveImage] = useState(product.image);
+  const { openInquiryModal, addToInquiryList } = useInquiry();
+
+  useEffect(() => {
+    setActiveImage(product.image);
+    setColor(product.colors[0]);
+    setSize(product.sizes[0]);
+  }, [product]);
 
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4);
   const pairsWell = products.filter((p) => product.pairsWellWith?.includes(p.slug));
+
+  const galleryImages = (product as any).images || [product.image, product.image, product.image, product.image];
 
   return (
     <div className="bg-background">
@@ -64,13 +75,14 @@ function ProductPage() {
         {/* Gallery */}
         <div>
           <div className="aspect-[3/4] overflow-hidden bg-ivory">
-            <img src={product.image} alt={product.alt} className="h-full w-full object-cover" />
+            <img src={activeImage} alt={product.alt} className="h-full w-full object-cover" />
           </div>
           <div className="mt-4 grid grid-cols-4 gap-3">
-            {[product.image, product.image, product.image, product.image].map((src, i) => (
+            {galleryImages.map((src: string, i: number) => (
               <button
                 key={i}
-                className={`aspect-[3/4] overflow-hidden bg-ivory ${i === 0 ? "ring-1 ring-ink" : ""}`}
+                onClick={() => setActiveImage(src)}
+                className={`aspect-[3/4] overflow-hidden bg-ivory transition-all ${activeImage === src ? "ring-1 ring-ink opacity-100 scale-[0.98]" : "opacity-70 hover:opacity-100"}`}
               >
                 <img src={src} alt="" className="h-full w-full object-cover" />
               </button>
@@ -81,16 +93,22 @@ function ProductPage() {
         {/* Details */}
         <div className="md:pt-8">
           {product.badge && (
-            <span className="inline-block bg-ivory px-2.5 py-1 text-[10px] uppercase tracking-[0.22em]">
+            <span className="inline-block bg-transparent border border-gold px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.22em] text-gold">
               {product.badge}
             </span>
           )}
           <h1 className="mt-4 font-display text-[34px] leading-tight md:text-[44px]">{product.name}</h1>
-  <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-    {product.category}
-  </p>
-          <p className="mt-6 text-xl tabular-nums text-ink">{formatKES(product.price)}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Inclusive of all duties · Free returns within 14 days</p>
+          <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+            {product.category}
+          </p>
+          <button
+            type="button"
+            onClick={() => openInquiryModal(product)}
+            className="mt-6 bg-ink px-6 py-3 text-[10px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200 font-medium"
+          >
+            Inquire Price
+          </button>
+          <p className="mt-2 text-[10px] text-muted-foreground uppercase tracking-wider">Pricing provided dynamically upon boutique request</p>
 
           <div className="my-8 hairline" />
 
@@ -172,6 +190,169 @@ function ProductPage() {
             </div>
           )}
 
+          {/* Specifications for Overtops */}
+          {product.category === "Overtops" && product.specs && (
+            <div className="mt-8 border-t border-hairline pt-6">
+              <h4 className="text-[11px] uppercase tracking-[0.22em] text-ink font-semibold">Ceremonial Details</h4>
+              <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
+                {product.specs.fabricType && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Fabric Type</span>
+                    <span className="font-medium text-ink">{product.specs.fabricType}</span>
+                  </div>
+                )}
+                {product.specs.trimColor && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Trim & Embroidery</span>
+                    <span className="font-medium text-ink">{product.specs.trimColor}</span>
+                  </div>
+                )}
+                {product.specs.occasion && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Occasion</span>
+                    <span className="font-medium text-ink">{product.specs.occasion}</span>
+                  </div>
+                )}
+                {product.specs.careInstructions && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Care</span>
+                    <span className="font-medium text-ink">{product.specs.careInstructions}</span>
+                  </div>
+                )}
+              </div>
+              {product.specs.recommendedThobePairing && (
+                <div className="mt-4 text-xs text-muted-foreground leading-relaxed italic bg-ivory p-4 border border-hairline rounded">
+                  <strong>Recommended Thobe Pairing:</strong> {product.specs.recommendedThobePairing}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Specifications for Traditional Canes */}
+          {product.category === "Traditional Canes" && product.specs && (
+            <div className="mt-8 border-t border-hairline pt-6">
+              <h4 className="text-[11px] uppercase tracking-[0.22em] text-ink font-semibold">Cane Craftsmanship</h4>
+              <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
+                {product.specs.material && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Material</span>
+                    <span className="font-medium text-ink">{product.specs.material}</span>
+                  </div>
+                )}
+                {product.specs.handleStyle && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Handle Style</span>
+                    <span className="font-medium text-ink">{product.specs.handleStyle}</span>
+                  </div>
+                )}
+                {product.specs.finish && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Finish</span>
+                    <span className="font-medium text-ink">{product.specs.finish}</span>
+                  </div>
+                )}
+                {product.specs.length && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Length</span>
+                    <span className="font-medium text-ink">{product.specs.length}</span>
+                  </div>
+                )}
+                {product.specs.origin && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Origin</span>
+                    <span className="font-medium text-ink">{product.specs.origin}</span>
+                  </div>
+                )}
+              </div>
+              {product.specs.stylingRecommendations && (
+                <div className="mt-4 text-xs text-muted-foreground leading-relaxed italic bg-ivory p-4 border border-hairline rounded">
+                  <strong>Styling Note:</strong> {product.specs.stylingRecommendations}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Specifications for Undergarments */}
+          {product.category === "Undergarments" && product.specs && (
+            <div className="mt-8 border-t border-hairline pt-6">
+              <h4 className="text-[11px] uppercase tracking-[0.22em] text-ink font-semibold">Atelier Undergarment Specifications</h4>
+              <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
+                {product.specs.fabricComposition && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Composition</span>
+                    <span className="font-medium text-ink">{product.specs.fabricComposition}</span>
+                  </div>
+                )}
+                {product.specs.breathability && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Breathability</span>
+                    <span className="font-medium text-ink">{product.specs.breathability}</span>
+                  </div>
+                )}
+                {product.specs.comfortLevel && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Comfort Level</span>
+                    <span className="font-medium text-ink">{product.specs.comfortLevel}</span>
+                  </div>
+                )}
+                {product.specs.climateSuitability && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Climate Suitability</span>
+                    <span className="font-medium text-ink">{product.specs.climateSuitability}</span>
+                  </div>
+                )}
+                {product.specs.washingInstructions && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Washing Care</span>
+                    <span className="font-medium text-ink">{product.specs.washingInstructions}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Specifications for Tasbih */}
+          {product.category === "Tasbih" && product.specs && (
+            <div className="mt-8 border-t border-hairline pt-6">
+              <h4 className="text-[11px] uppercase tracking-[0.22em] text-ink font-semibold">Tasbih Specifications & Craft</h4>
+              <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-xs">
+                {product.specs.beadMaterial && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Bead Material</span>
+                    <span className="font-medium text-ink">{product.specs.beadMaterial}</span>
+                  </div>
+                )}
+                {product.specs.beadCount && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Bead Count</span>
+                    <span className="font-medium text-ink">{product.specs.beadCount} Beads</span>
+                  </div>
+                )}
+                {product.specs.isHandcrafted !== undefined && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Craftsmanship</span>
+                    <span className="font-medium text-ink">{product.specs.isHandcrafted ? "Masterfully Handcrafted" : "Refined Precision Craft"}</span>
+                  </div>
+                )}
+                {product.specs.origin && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Origin</span>
+                    <span className="font-medium text-ink">{product.specs.origin}</span>
+                  </div>
+                )}
+                {product.specs.packagingDetails && (
+                  <div className="flex justify-between border-b border-hairline pb-2">
+                    <span className="text-muted-foreground">Packaging</span>
+                    <span className="font-medium text-ink">{product.specs.packagingDetails}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+
+
+
           {/* Colour */}
           <div className="mt-10">
             <div className="flex items-center justify-between">
@@ -184,7 +365,7 @@ function ProductPage() {
                   key={c}
                   onClick={() => setColor(c)}
                   aria-label={c}
-                  className={`h-9 w-9 rounded-full border ${color === c ? "border-ink ring-2 ring-ink/10 ring-offset-2" : "border-hairline"}`}
+                  className={`h-9 w-9 rounded-full border transition-all ${color === c ? "border-ink ring-2 ring-ink/10 ring-offset-2 scale-[1.05]" : "border-hairline hover:border-ink"}`}
                   style={{ background: c }}
                 />
               ))}
@@ -228,19 +409,64 @@ function ProductPage() {
 
           {/* Actions */}
           <div className="mt-8 grid gap-3">
-            <button className="h-13 inline-flex h-13 items-center justify-center bg-ink py-4 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-foreground">
-              Add to Bag
+            <button 
+              onClick={() => addToInquiryList(product, color, size, qty)}
+              className="h-13 inline-flex items-center justify-center bg-ink py-4 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200 font-medium"
+            >
+              Add to Inquiry List
             </button>
-            <button className="inline-flex items-center justify-center border border-ink py-4 text-[11px] uppercase tracking-[0.24em] text-ink hover:bg-ink hover:text-white">
-              Buy Now
+            <button 
+              onClick={() => openInquiryModal(product)}
+              className="inline-flex items-center justify-center border border-ink py-4 text-[11px] uppercase tracking-[0.24em] text-ink hover:bg-ink hover:text-white transition-colors duration-200 font-medium"
+            >
+              Inquire Price
             </button>
             <a
-              href="https://wa.me/254700000000"
-              className="inline-flex items-center justify-center gap-2 py-3 text-[11px] uppercase tracking-[0.22em] text-ink link-underline"
+              href={`https://wa.me/254700000000?text=${encodeURIComponent(
+                `Hello Kanzu Bay, I would like to inquire about the ${product.name} (Color: ${color}, Size: ${size}).`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 py-3 text-[11px] uppercase tracking-[0.22em] text-ink link-underline hover:text-gold font-medium"
             >
-              <MessageCircle className="h-4 w-4" strokeWidth={1.25} /> Order via WhatsApp
+              <MessageCircle className="h-4 w-4" strokeWidth={1.25} /> Inquire via WhatsApp
             </a>
           </div>
+
+          {/* Complete Your Collection (Premium Kanzu Pages) */}
+          {(product.category === "Saudi Thobes" ||
+            product.category === "Emirati Kanzu" ||
+            product.category === "Omani Kanzu" ||
+            product.category === "Swahili Kanzu") && (
+            <div className="mt-8 border-t border-hairline pt-6">
+              <h4 className="text-[11px] uppercase tracking-[0.22em] text-ink font-semibold flex items-center gap-1.5">
+                <span className="inline-block w-1.5 h-1.5 bg-gold rounded-full"></span>
+                Complete Your Collection
+              </h4>
+              <ul className="mt-4 space-y-2.5 text-xs text-ink/80">
+                <li className="flex items-center gap-2">
+                  <span className="text-gold font-bold">✓</span>
+                  <span>Premium White Emirati Kanzu</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-gold font-bold">✓</span>
+                  <span>Royal Omani Kumma (Hand-embroidered)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-gold font-bold">✓</span>
+                  <span>Royal Oud Tansoor (Eau de Parfum)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-gold font-bold">✓</span>
+                  <span>Premium Handcrafted Tasbih</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-gold font-bold">✓</span>
+                  <span>Classic Full-Grain Arabic Sandals</span>
+                </li>
+              </ul>
+            </div>
+          )}
 
           <div className="mt-10 grid grid-cols-3 gap-4 border-t border-hairline pt-8 text-xs text-muted-foreground">
             <div className="flex flex-col items-start gap-2">

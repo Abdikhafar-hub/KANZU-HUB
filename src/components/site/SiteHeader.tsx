@@ -1,6 +1,23 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Search, Heart, User, ShoppingBag, MessageCircle, Menu, X } from "lucide-react";
+import { Search, Heart, User, ShoppingBag, MessageCircle, Menu, X, Instagram, Phone } from "lucide-react";
+import { useInquiry } from "@/context/InquiryContext";
+
+function TiktokIcon({ className, strokeWidth = 1.5 }: { className?: string; strokeWidth?: number }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+    </svg>
+  );
+}
 
 // Headwear product imports for mega menu
 import kufiCap from "@/assets/kufi_cap.png";
@@ -39,11 +56,14 @@ const WATCH_COLLECTIONS = [
 const NAV: { label: string; to: string; search?: Record<string, string> }[] = [
   { label: "Shop All", to: "/shop" },
   { label: "Thobes", to: "/shop", search: { category: "Thobes" } },
-  { label: "Fragrances", to: "/shop", search: { category: "Luxury Perfumes" } },
+  { label: "Overtops", to: "/shop", search: { category: "Overtops" } },
+  { label: "Traditional Canes", to: "/shop", search: { category: "Traditional Canes" } },
   { label: "Headwear", to: "/shop", search: { category: "Headwear" } },
   { label: "Sandals", to: "/shop", search: { category: "Men's Sandals" } },
   { label: "Watches", to: "/shop", search: { category: "Watches" } },
-  { label: "About", to: "/about" },
+  { label: "Tasbih", to: "/shop", search: { category: "Tasbih" } },
+  { label: "Undergarments", to: "/shop", search: { category: "Undergarments" } },
+  { label: "Accessories", to: "/shop", search: { category: "Accessories" } },
 ];
 
 export function SiteHeader() {
@@ -53,6 +73,7 @@ export function SiteHeader() {
   const [mobileHeadwearOpen, setMobileHeadwearOpen] = useState(false);
   const [watchesHovered, setWatchesHovered] = useState(false);
   const [mobileWatchesOpen, setMobileWatchesOpen] = useState(false);
+  const { inquiryCount, setDrawerOpen } = useInquiry();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -64,8 +85,47 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 bg-background">
       <div className="w-full bg-ink text-[11px] tracking-[0.18em] uppercase text-white">
-        <div className="mx-auto flex h-9 max-w-[1440px] items-center justify-center px-6">
-          <span className="font-medium">Free Nairobi Delivery on Orders Above KES 5,000</span>
+        <div className="mx-auto flex h-9 max-w-[1440px] items-center justify-between px-6">
+          <div className="hidden sm:block w-36"></div>
+          <span className="font-medium text-center flex-1">
+            Complimentary Nairobi Delivery on All Boutique Orders
+          </span>
+          <div className="hidden sm:flex items-center justify-end gap-4 w-36">
+            <a
+              href="https://tiktok.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gold transition-colors"
+              aria-label="TikTok"
+            >
+              <TiktokIcon className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gold transition-colors"
+              aria-label="Instagram"
+            >
+              <Instagram className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </a>
+            <a
+              href="https://wa.me/254700000000"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-gold transition-colors"
+              aria-label="WhatsApp"
+            >
+              <MessageCircle className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </a>
+            <a
+              href="tel:+254700000000"
+              className="hover:text-gold transition-colors"
+              aria-label="Phone"
+            >
+              <Phone className="h-3.5 w-3.5" strokeWidth={1.5} />
+            </a>
+          </div>
         </div>
       </div>
 
@@ -77,33 +137,25 @@ export function SiteHeader() {
         <div className="mx-auto grid h-20 max-w-[1440px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-6">
           {/* Left: mobile menu + nav */}
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              aria-label="Open menu"
-              onClick={() => setOpen(true)}
-              className="grid h-10 w-10 place-items-center text-ink lg:hidden"
-            >
-              <Menu className="h-5 w-5" strokeWidth={1.25} />
-            </button>
             <nav className="hidden items-center gap-8 lg:flex">
-              <Link to="/" className="text-[12px] tracking-[0.18em] uppercase text-ink link-underline">
+              <Link to="/" className="text-[12px] tracking-[0.18em] uppercase nav-link">
                 Home
               </Link>
-              <Link to="/shop" className="text-[12px] tracking-[0.18em] uppercase text-ink link-underline">
+              <Link to="/shop" className="text-[12px] tracking-[0.18em] uppercase nav-link">
                 Shop
               </Link>
-              <Link to="/shop" className="text-[12px] tracking-[0.18em] uppercase text-ink link-underline">
+              <Link to="/shop" className="text-[12px] tracking-[0.18em] uppercase nav-link">
                 Collections
               </Link>
             </nav>
           </div>
 
           {/* Center: wordmark */}
-          <Link to="/" className="text-center">
-            <span className="block font-display text-[26px] leading-none tracking-[0.32em] text-ink">
+          <Link to="/" className="text-center select-none">
+            <span className="block font-display text-lg tracking-[0.24em] leading-none text-gold-secondary sm:text-xl md:text-[26px] md:tracking-[0.32em]">
               KANZU BAY
             </span>
-            <span className="mt-1 block text-[9px] uppercase tracking-[0.32em] text-muted-foreground">
+            <span className="mt-1 block text-[7px] tracking-[0.18em] uppercase text-muted-foreground sm:text-[8px] sm:tracking-[0.24em] md:text-[9px] md:tracking-[0.32em]">
               Where Tradition Meets Class
             </span>
           </Link>
@@ -113,7 +165,13 @@ export function SiteHeader() {
             <IconButton label="Search"><Search className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
             <IconButton label="Wishlist"><Heart className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
             <IconButton label="Account"><User className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
-            <IconButton label="Cart" badge="0"><ShoppingBag className="h-[18px] w-[18px]" strokeWidth={1.25} /></IconButton>
+            <IconButton 
+              label="Inquiry List" 
+              badge={inquiryCount > 0 ? String(inquiryCount) : undefined}
+              onClick={() => setDrawerOpen(true)}
+            >
+              <ShoppingBag className="h-[18px] w-[18px]" strokeWidth={1.25} />
+            </IconButton>
             <a
               href="https://wa.me/254700000000"
               aria-label="WhatsApp"
@@ -121,6 +179,14 @@ export function SiteHeader() {
             >
               <MessageCircle className="h-[18px] w-[18px]" strokeWidth={1.25} />
             </a>
+            <button
+              type="button"
+              aria-label="Open menu"
+              onClick={() => setOpen(true)}
+              className="grid h-10 w-10 place-items-center text-ink lg:hidden hover:text-gold"
+            >
+              <Menu className="h-5 w-5" strokeWidth={1.25} />
+            </button>
           </div>
         </div>
 
@@ -147,7 +213,7 @@ export function SiteHeader() {
                     <Link
                       to={n.to}
                       search={n.search}
-                      className={`text-[11px] tracking-[0.22em] uppercase transition-colors duration-200 ${headwearHovered ? 'text-gold' : 'text-ink/80 hover:text-ink'}`}
+                      className={`text-[11px] tracking-[0.22em] uppercase nav-link ${headwearHovered ? '!text-gold' : ''}`}
                     >
                       {n.label}
                     </Link>
@@ -167,7 +233,7 @@ export function SiteHeader() {
                     <Link
                       to={n.to}
                       search={n.search}
-                      className={`text-[11px] tracking-[0.22em] uppercase transition-colors duration-200 ${watchesHovered ? 'text-gold' : 'text-ink/80 hover:text-ink'}`}
+                      className={`text-[11px] tracking-[0.22em] uppercase nav-link ${watchesHovered ? '!text-gold' : ''}`}
                     >
                       {n.label}
                     </Link>
@@ -183,7 +249,7 @@ export function SiteHeader() {
                     setHeadwearHovered(false);
                     setWatchesHovered(false);
                   }}
-                  className="text-[11px] tracking-[0.22em] uppercase text-ink/80 hover:text-ink py-1"
+                  className="text-[11px] tracking-[0.22em] uppercase nav-link py-1"
                 >
                   {n.label}
                 </Link>
@@ -271,11 +337,11 @@ export function SiteHeader() {
       {open && (
         <div className="fixed inset-0 z-[60] bg-black/40 lg:hidden" onClick={() => setOpen(false)}>
           <aside
-            className="absolute left-0 top-0 h-full w-[82%] max-w-[360px] bg-background p-6"
+            className="absolute right-0 top-0 h-full w-[82%] max-w-[360px] bg-background p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <span className="font-display text-xl tracking-[0.28em]">KANZU BAY</span>
+              <span className="font-display text-xl tracking-[0.28em] text-gold-secondary">KANZU BAY</span>
               <button aria-label="Close" onClick={() => setOpen(false)}>
                 <X className="h-5 w-5" strokeWidth={1.25} />
               </button>
@@ -371,11 +437,12 @@ export function SiteHeader() {
   );
 }
 
-function IconButton({ children, label, badge }: { children: React.ReactNode; label: string; badge?: string }) {
+function IconButton({ children, label, badge, onClick }: { children: React.ReactNode; label: string; badge?: string; onClick?: () => void }) {
   return (
     <button
       type="button"
       aria-label={label}
+      onClick={onClick}
       className="relative grid h-10 w-10 place-items-center hover:text-gold"
     >
       {children}

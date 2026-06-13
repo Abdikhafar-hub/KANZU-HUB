@@ -45,7 +45,7 @@ function About() {
               </p>
               <Link
                 to="/shop"
-                className="mt-10 inline-flex h-12 items-center bg-ink px-8 text-[11px] uppercase tracking-[0.24em] text-white"
+                className="mt-10 inline-flex h-12 items-center bg-ink px-8 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200"
               >
                 Explore the Collection
               </Link>

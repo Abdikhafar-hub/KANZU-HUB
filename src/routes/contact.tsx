@@ -58,7 +58,7 @@ function Contact() {
             <label className="eyebrow">Message</label>
             <textarea rows={5} className="mt-2 w-full border-b border-ink/80 bg-transparent py-3 text-sm focus:outline-none focus:border-ink" />
           </div>
-          <button className="mt-4 h-12 bg-ink text-[11px] uppercase tracking-[0.24em] text-white">Send</button>
+          <button className="mt-4 h-12 bg-ink text-[11px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200">Send</button>
         </div>
       </form>
     </div>

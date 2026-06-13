@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Truck, Scissors, Sparkles, Star } from "lucide-react";
 import heroImg from "@/assets/thobe.png";
-import catSaudi from "@/assets/cat-saudi.jpg";
+import catSaudi from "@/assets/cat-saudi.jpeg";
 import catEmirati from "@/assets/cat-emirati.jpg";
 import catOmani from "@/assets/cat-omani.jpg";
 import catMoroccan from "@/assets/cat-moroccan.jpg";
@@ -13,13 +13,15 @@ import watchImage from "@/assets/watch_arabic_silver.jpg";
 import sandalImage from "@/assets/sandal8.webp";
 import eidBanner from "@/assets/eid-banner.jpg";
 import videoPoster from "@/assets/video-poster.jpg";
+import over1 from "@/assets/over1.jpeg";
+import bak1 from "@/assets/bak1.jpeg";
 import ig1 from "@/assets/ig1.jpg";
 import ig2 from "@/assets/ig2.jpg";
 import ig3 from "@/assets/ig3.jpg";
 import ig4 from "@/assets/ig4.jpg";
 import ig5 from "@/assets/ig5.jpg";
 import ig6 from "@/assets/ig6.jpg";
-import { products } from "@/lib/products";
+import { products, isPremiumProduct } from "@/lib/products";
 import { ProductCard } from "@/components/site/ProductCard";
 
 // Headwear lifestyle imports
@@ -63,7 +65,10 @@ function Index() {
       <NewArrivals />
       <EidBanner />
       <BestSellers />
+      <CeremonialOvertopsSection />
       <TraditionalHeadwearSection />
+      <IslamicEssentialsSection />
+      <TraditionalAccessoriesSection />
       <CompleteTheLook />
       <WhyKanzuBay />
       <VideoSection />
@@ -98,7 +103,7 @@ function Hero() {
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Link
                 to="/shop"
-                className="inline-flex h-12 items-center bg-ink px-7 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-foreground"
+                className="inline-flex h-12 items-center bg-ink px-7 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200"
               >
                 Shop the Collection
               </Link>
@@ -121,6 +126,7 @@ function Hero() {
 
 const CATEGORIES = [
   { label: "Thobes", image: catSaudi, large: true },
+  { label: "Overtops", image: over1 },
   { label: "Men's Sandals", image: sandalImage },
   { label: "Watches", image: watchImage },
   { label: "Headwear", image: catOmani },
@@ -234,6 +240,28 @@ function BestSellers() {
   );
 }
 
+function CeremonialOvertopsSection() {
+  const items = products.filter((p) => p.category === "Overtops").slice(0, 4);
+  return (
+    <section className="border-t border-hairline bg-background">
+      <div className="mx-auto max-w-[1440px] px-6 py-24 md:py-32">
+        <SectionHeader
+          eyebrow="Premium Collection"
+          title="Ceremonial Overtops"
+          align="left"
+          cta={{ label: "Shop Overtops", to: "/shop", search: { category: "Overtops" } }}
+        />
+        <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          For Eid, weddings, Jummah and distinguished occasions.
+        </p>
+        <div className="mt-14 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-4 md:gap-x-8">
+          {items.map((p) => <ProductCard key={p.slug} p={p} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function TraditionalHeadwearSection() {
   return (
     <section className="border-t border-hairline bg-background">
@@ -276,15 +304,118 @@ function TraditionalHeadwearSection() {
   );
 }
 
+function TraditionalAccessoriesSection() {
+  const slugs = ["royal-omani-kumma", "sultan-royal-gold", "olive-wood-tasbih", "sultan-bakora"];
+  const items = products.filter((p) => slugs.includes(p.slug));
+  const sortedItems = slugs.map(slug => items.find(p => p.slug === slug)).filter(Boolean) as typeof products;
+
+  return (
+    <section className="border-t border-hairline bg-background">
+      <div className="mx-auto max-w-[1440px] px-6 py-24 md:py-32">
+        <SectionHeader
+          eyebrow="Curated Essentials"
+          title="Traditional Accessories"
+          align="left"
+          cta={{ label: "Shop Accessories", to: "/shop", search: { category: "Accessories" } }}
+        />
+        <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground">
+          Timeless pieces representing heritage, prestige, and distinction for the modern gentleman.
+        </p>
+        <div className="mt-14 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-4 md:gap-x-8">
+          {sortedItems.map((p) => <ProductCard key={p.slug} p={p} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function IslamicEssentialsSection() {
+  const essentials = [
+    {
+      title: "Handcrafted Tasbih",
+      description: "Olive Wood, Sandalwood, and natural gemstone beads designed for contemplation.",
+      image: ig4,
+      to: "/shop" as const,
+      search: { category: "Tasbih" },
+      label: "Explore Tasbih"
+    },
+    {
+      title: "Omani Kumma",
+      description: "Authentic hand-embroidered caps representing coastal Swahili and Omani heritage.",
+      image: lifestyleKumma,
+      to: "/shop" as const,
+      search: { category: "Headwear", subCategory: "Omani Kumma" },
+      label: "Explore Kummas"
+    },
+    {
+      title: "Traditional Canes",
+      description: "Fine, hand-carved hardwood Bakora canes representing East African heritage and authority.",
+      image: bak1,
+      to: "/shop" as const,
+      search: { category: "Traditional Canes" },
+      label: "Explore Canes"
+    },
+    {
+      title: "Prayer Mats",
+      description: "Plush, high-density woven tapestry designed for daily devotion.",
+      image: ig1,
+      to: "/shop" as const,
+      search: { category: "Prayer Mats" },
+      label: "Explore Mats"
+    }
+  ];
+
+  return (
+    <section className="border-t border-hairline bg-ink text-white">
+      <div className="mx-auto max-w-[1440px] px-6 py-24 md:py-32">
+        <div className="text-center max-w-xl mx-auto mb-16">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-gold font-semibold">Faith & Tradition</p>
+          <h2 className="mt-4 font-display text-3xl md:text-5xl text-white">Islamic Essentials</h2>
+          <p className="mt-4 text-sm leading-relaxed text-white/75">
+            A curated collection of spiritual and cultural accompaniments. Each piece represents heritage, devotion, and refined Islamic craftsmanship.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {essentials.map((item) => (
+            <Link
+              key={item.title}
+              to={item.to}
+              search={item.search}
+              className="group relative block aspect-[3/4] overflow-hidden bg-ink/40 border border-white/10"
+            >
+              <img
+                src={item.image}
+                alt={item.title}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.08] opacity-80"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity duration-300" />
+              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
+                <h3 className="font-display text-xl md:text-2xl text-white">{item.title}</h3>
+                <p className="mt-2.5 text-xs text-white/70 leading-relaxed font-sans line-clamp-2">
+                  {item.description}
+                </p>
+                <div className="mt-5 inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.25em] text-gold font-medium">
+                  {item.label} <span className="translate-x-0 group-hover:translate-x-1 transition-transform duration-200">→</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CompleteTheLook() {
   const outfitSlugs = [
     "swahili-kanzu-mombasa",
     "royal-omani-kumma",
-    "oud-tansoor",
+    "olive-wood-tasbih",
     "omani-royal-heritage-tan",
   ];
   const outfitItems = products.filter((p) => outfitSlugs.includes(p.slug));
-  const total = outfitItems.reduce((acc, p) => acc + p.price, 0);
 
   return (
     <section className="border-t border-hairline bg-background">
@@ -314,31 +445,32 @@ function CompleteTheLook() {
               <p className="eyebrow text-gold">The Friday / Eid Ensemble</p>
               <h3 className="mt-2 font-display text-2xl">Complete Look</h3>
               <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
-                A carefully curated outfit composition matching our Mombasa White Linen Kanzu with hand-knit detailing, an embroidered Royal Omani Kumma, our rich Cambodian Oud Tansoor attar, and hand-crafted traditional Arabic leather sandals.
+                A carefully curated outfit composition matching our Mombasa White Linen Kanzu with hand-knit detailing, an embroidered Royal Omani Kumma, our premium handcrafted Jerusalem Olive Wood Tasbih, and hand-crafted traditional Arabic leather sandals.
               </p>
               <div className="my-6 hairline" />
               <ul className="space-y-3">
                 {outfitItems.map((p) => (
                   <li key={p.slug} className="flex items-center justify-between text-xs">
                     <span className="text-muted-foreground truncate max-w-[220px]">{p.name}</span>
-                    <span className="font-mono text-ink">KES {p.price.toLocaleString("en-KE")}</span>
+                    <span className="text-[10px] text-gold uppercase tracking-wider font-medium">
+                      {p.category}
+                    </span>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
               <div className="my-6 hairline" />
-              <div className="flex items-end justify-between">
-                <span className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">Ensemble Total</span>
-                <span className="text-lg font-semibold tabular-nums text-ink">KES {total.toLocaleString("en-KE")}</span>
-              </div>
-              <button 
-                type="button" 
-                className="mt-6 w-full bg-ink py-4 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-foreground transition-all duration-300"
-                onClick={() => alert("All 4 items have been added to your shopping bag.")}
+              <a
+                href={`https://wa.me/254700000000?text=${encodeURIComponent(
+                  `Hello Kanzu Bay, I would like to inquire about the Friday / Eid Ensemble:\n- Mombasa White Linen Kanzu\n- Royal Omani Kumma\n- Jerusalem Olive Wood Tasbih\n- Omani Royal Heritage Tan Sandals`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 block w-full text-center bg-ink py-4 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200 font-medium"
               >
-                Add Entire Look to Bag
-              </button>
+                Inquire Ensemble
+              </a>
             </div>
           </div>
         </div>
@@ -366,7 +498,7 @@ function EidBanner() {
             </p>
             <Link
               to="/shop"
-              className="mt-10 inline-flex h-12 items-center bg-ink px-8 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-foreground"
+              className="mt-10 inline-flex h-12 items-center bg-ink px-8 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200"
             >
               Discover the Edit
             </Link>
@@ -530,7 +662,7 @@ function LocationSection() {
             <div className="mt-10 flex flex-wrap gap-3">
               <a
                 href="https://wa.me/254700000000"
-                className="inline-flex h-12 items-center bg-ink px-7 text-[11px] uppercase tracking-[0.24em] text-white"
+                className="inline-flex h-12 items-center bg-ink px-7 text-[11px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200"
               >
                 Chat on WhatsApp
               </a>

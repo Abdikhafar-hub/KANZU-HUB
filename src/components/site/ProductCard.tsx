@@ -1,9 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import type { Product } from "@/lib/products";
-import { formatKES } from "@/lib/products";
+import { isPremiumProduct } from "@/lib/products";
+import { useInquiry } from "@/context/InquiryContext";
 
 export function ProductCard({ p }: { p: Product }) {
+  const premium = isPremiumProduct(p);
+  const { openInquiryModal } = useInquiry();
+
   return (
     <article className="group">
       <Link to="/products/$slug" params={{ slug: p.slug }} className="block">
@@ -15,7 +19,7 @@ export function ProductCard({ p }: { p: Product }) {
             className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
           />
           {p.badge && (
-            <span className="absolute left-4 top-4 bg-background px-2.5 py-1 text-[10px] uppercase tracking-[0.22em] text-ink">
+            <span className="absolute left-4 top-4 bg-transparent border border-gold px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.22em] text-gold">
               {p.badge}
             </span>
           )}
@@ -30,19 +34,29 @@ export function ProductCard({ p }: { p: Product }) {
             <Heart className="h-4 w-4" strokeWidth={1.25} />
           </button>
           <div className="absolute inset-x-3 bottom-3 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            <span className="block w-full bg-ink py-3 text-center text-[11px] uppercase tracking-[0.24em] text-white">
+            <span className="block w-full bg-ink py-3 text-center text-[11px] uppercase tracking-[0.24em] text-white hover:bg-gold hover:text-ink transition-colors duration-200">
               Quick View
             </span>
           </div>
         </div>
-        <div className="mt-4 flex items-start justify-between gap-3">
+        <div className="mt-4 flex items-center justify-between gap-3">
           <div>
             <h3 className="font-display text-[15px] leading-snug text-ink">{p.name}</h3>
             <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
               {p.category}
             </p>
           </div>
-          <p className="whitespace-nowrap text-sm tabular-nums text-ink">{formatKES(p.price)}</p>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              openInquiryModal(p);
+            }}
+            className="whitespace-nowrap bg-ink px-3 py-1.5 text-[9px] uppercase tracking-[0.16em] text-white hover:bg-gold hover:text-ink transition-colors duration-200 font-medium"
+          >
+            Inquire Price
+          </button>
         </div>
       </Link>
     </article>
